@@ -5,6 +5,9 @@ import numpy as np
 import os
 
 app = Flask(__name__)
+
+# Load the model only ONCE when the application starts
+# This is crucial for performance and avoiding timeouts
 model = load_model('chicken_disease_model.h5')
 
 # Update to your class names
@@ -71,6 +74,7 @@ def predict():
         confidences=[float(c) for c in prediction]
     )
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Get the port from the environment variable provided by Render
+    port = int(os.environ.get("PORT", 5000)) # Default to 5000 if not set (for local dev)
+    app.run(host='0.0.0.0', port=port, debug=False) # Set debug to False for production
